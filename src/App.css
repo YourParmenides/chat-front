@@ -18,7 +18,8 @@ body {
   width: 100vw;
   height: 100vh;
   background-image: url("worldbackground.jpg");
-  background-size: 100vw 100vh;
+  background-size: cover;
+  background-position: center;
 }
 
 /*chat room (second screen css)*/
@@ -46,6 +47,9 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+}
+
+.footer form {
 }
 
 /*login screen (first scree) css*/

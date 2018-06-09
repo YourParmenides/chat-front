@@ -5,11 +5,17 @@ import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import "antd/dist/antd.css";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+import { createStore, compose } from "redux";
 import { BrowserRouter } from "react-router-dom";
 import { reducers } from "./reducers/reducers";
+import { applyMiddleware } from "redux";
+import socketEvents from "./middleware/socket";
+import logger from "redux-logger";
 
-const store = createStore(reducers);
+// const composeEnhancers =
+//   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
+
+const store = createStore(reducers, applyMiddleware(logger, socketEvents));
 
 ReactDOM.render(
   <Provider store={store}>

@@ -7,23 +7,34 @@ import { getUsers } from "../actions/actions";
 // import { allUsers } from "../components/message";
 import ChatRoom from "../components/chatRoom";
 import { Layout, Menu, Icon } from "antd";
+import { socket } from "../actions/actions";
 const { Sider } = Layout;
-
 //main component of chat, fetch users and render them to user list, add component of chat and userlist,
 //route each user to a specific chat
 
 class ChatRooms extends Component {
   constructor(props) {
     super(props);
+    this.uniqueId();
     this.getUsers();
-    console.log(props, "XXXX");
+    this.props.socketConnect();
+    this.state = {
+      userClicked: ""
+    };
   }
+
+  uniqueId = clicked => {
+    const one = this.props.userLogged.userLoggedIn.username;
+    const two = this.props.match.params.user;
+    const three = one > two ? `${two}--v--${one}` : `${one}--v--${two}`;
+    console.log(one, two, three, "XXXXX");
+    this.props.socketConnect(three);
+  };
 
   getUsers = () => {
     fetch("http://localhost:8000/users")
       .then(data => data.json())
-      .then(dataResponse => this.props.getUsers(dataResponse))
-      .then(x => console.log(x));
+      .then(dataResponse => this.props.getUsers(dataResponse));
   };
 
   allUsers = () => {
@@ -32,7 +43,9 @@ class ChatRooms extends Component {
         <Menu.Item key={e.id} className="fadeInDown">
           <Link to={`/chatrooms/${e.username}`}>
             <Icon type="user" />
-            <span className="nav-text">{e.username}</span>
+            <span className="nav-text" onClick={this.uniqueId()}>
+              {e.username}
+            </span>
           </Link>
         </Menu.Item>
       );
@@ -65,11 +78,13 @@ class ChatRooms extends Component {
 }
 
 const mapStateToProps = state => ({
-  usersList: state.usersList.users
+  usersList: state.usersList.users,
+  userLogged: state.userLogged
 });
 
 const mapDispatchToProps = dispatch => ({
-  getUsers: dataResponse => dispatch(getUsers(dataResponse))
+  getUsers: dataResponse => dispatch(getUsers(dataResponse)),
+  socketConnect: () => dispatch(socket())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatRooms);

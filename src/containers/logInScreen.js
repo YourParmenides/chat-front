@@ -2,17 +2,27 @@
 import React, { Component } from "react";
 import LogInInputs from "../components/logininputs";
 import "../App.css";
-
+import { connect } from "react-redux";
+import { userLogged } from "../actions/actions";
 //main screen, import component add title
 class LogIn extends Component {
   render() {
+    console.log(this.props, "father");
     return (
       <div className="logIn">
         <p id="title">Working Title</p>
-        <LogInInputs />
+        <LogInInputs user={{ ...this.props }} />
       </div>
     );
   }
 }
 
-export default LogIn;
+const mapStateToProps = state => ({
+  userLogged: state.userLogged
+});
+
+const mapDispatchToProps = dispatch => ({
+  userLogged: dataResponse => dispatch(userLogged(dataResponse))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LogIn);

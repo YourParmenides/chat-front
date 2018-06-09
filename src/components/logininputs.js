@@ -3,8 +3,8 @@ import { Input, Button } from "antd";
 import { Redirect } from "react-router";
 
 class LogInInputs extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       redirect: false,
       username: "",
@@ -18,20 +18,6 @@ class LogInInputs extends Component {
       [e.target.name]: e.target.value
     });
   };
-  captureInputPass = e => {
-    this.setState({
-      password: e.target.value
-    });
-  };
-  captureInputLan = e => {
-    this.setState({
-      language: e.target.value
-    });
-  };
-  //
-  // handleOnClick = () => {
-  //   this.setState({ redirect: true });
-  // };
 
   checkUser = () => {
     fetch("http://localhost:8000/addUser", {
@@ -41,13 +27,15 @@ class LogInInputs extends Component {
         "Content-Type": "application/json"
       })
     }).then(res => {
-      console.log(res);
+      if (res.status === 200 || res.status === 201)
+        this.props.user.userLogged(this.state);
       if (res.status === 200) this.setState({ redirect: true });
       if (res.status === 201) this.setState({ redirect: true });
     });
   };
 
   render() {
+    console.log(this.props, "child");
     if (this.state.redirect) {
       return <Redirect push to="/chatrooms" />;
     }

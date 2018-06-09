@@ -13,7 +13,6 @@ class App extends Component {
           <Route exact path="/" component={LogIn} />
           <Route exact path="/chatrooms" component={ChatRooms} />
           <Route path="/chatrooms/:user" component={ChatRooms} />
-          <Route render={() => <h1>Page not found</h1>} />
         </div>
       </Router>
     );
