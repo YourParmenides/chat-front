@@ -24,12 +24,6 @@ body {
 
 /*chat room (second screen css)*/
 
-.father-layout {
-  background-image: url("worldbackground.jpg");
-  width: 100vw;
-  height: 100vh;
-}
-
 .ant-layout-content {
   height: 600px;
 }

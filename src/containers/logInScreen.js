@@ -7,7 +7,6 @@ import { userLogged } from "../actions/actions";
 //main screen, import component add title
 class LogIn extends Component {
   render() {
-    console.log(this.props, "father");
     return (
       <div className="logIn">
         <p id="title">Working Title</p>

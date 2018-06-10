@@ -16,15 +16,16 @@ const usersList = (state = users, action) => {
   }
 };
 
-const messageReducer = (state = messages, action) => {
+const newMessages = (state = messages, action) => {
   switch (action.type) {
-    case "SEND_MESSAGE_SUCCES":
-      console.log([...state, action.payload], 555);
-      return [...state, action.payload];
+    case "NEW_MESSAGE":
+      return [...state, action.message];
+      break;
     default:
       return state;
   }
 };
+
 const userLoggedIn = { username: "", language: "" };
 const userLogged = (state = userLoggedIn, action) => {
   switch (action.type) {
@@ -32,7 +33,6 @@ const userLogged = (state = userLoggedIn, action) => {
       return {
         userLoggedIn: action.userinfo
       };
-      break;
     default:
       return state;
   }
@@ -40,6 +40,6 @@ const userLogged = (state = userLoggedIn, action) => {
 //export
 export const reducers = combineReducers({
   usersList: usersList,
-  messages: messageReducer,
+  messages: newMessages,
   userLogged
 });

@@ -35,7 +35,6 @@ class LogInInputs extends Component {
   };
 
   render() {
-    console.log(this.props, "child");
     if (this.state.redirect) {
       return <Redirect push to="/chatrooms" />;
     }

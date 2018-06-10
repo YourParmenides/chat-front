@@ -3,11 +3,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { getUsers } from "../actions/actions";
+import { getUsers, joinRoom } from "../actions/actions";
 // import { allUsers } from "../components/message";
 import ChatRoom from "../components/chatRoom";
 import { Layout, Menu, Icon } from "antd";
-import { socket } from "../actions/actions";
+// import io from "socket.io-client";
+
 const { Sider } = Layout;
 //main component of chat, fetch users and render them to user list, add component of chat and userlist,
 //route each user to a specific chat
@@ -15,21 +16,8 @@ const { Sider } = Layout;
 class ChatRooms extends Component {
   constructor(props) {
     super(props);
-    this.uniqueId();
     this.getUsers();
-    this.props.socketConnect();
-    this.state = {
-      userClicked: ""
-    };
   }
-
-  uniqueId = clicked => {
-    const one = this.props.userLogged.userLoggedIn.username;
-    const two = this.props.match.params.user;
-    const three = one > two ? `${two}--v--${one}` : `${one}--v--${two}`;
-    console.log(one, two, three, "XXXXX");
-    this.props.socketConnect(three);
-  };
 
   getUsers = () => {
     fetch("http://localhost:8000/users")
@@ -37,20 +25,23 @@ class ChatRooms extends Component {
       .then(dataResponse => this.props.getUsers(dataResponse));
   };
 
+  // this.props.match.params.user
   allUsers = () => {
     return this.props.usersList.map(e => {
       return (
-        <Menu.Item key={e.id} className="fadeInDown">
+        <Menu.Item key={e.id} className="fadeInDown" ref="menuitem">
           <Link to={`/chatrooms/${e.username}`}>
             <Icon type="user" />
-            <span className="nav-text" onClick={this.uniqueId()}>
-              {e.username}
-            </span>
+            <span className="nav-text">{e.username}</span>
           </Link>
         </Menu.Item>
       );
     });
   };
+  //
+  // socketConnect = () => {
+  //   const socket = io.connect("http://localhost:8000");
+  // };
 
   render() {
     return (
@@ -67,6 +58,7 @@ class ChatRooms extends Component {
             mode="inline"
             defaultSelectedKeys={["4"]}
             className="menu"
+            // onClick={this.socketConnectrs}
           >
             {this.allUsers()}
           </Menu>
@@ -84,7 +76,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   getUsers: dataResponse => dispatch(getUsers(dataResponse)),
-  socketConnect: () => dispatch(socket())
+  joinRoom: roomID => dispatch(joinRoom(roomID))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatRooms);

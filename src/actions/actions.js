@@ -3,8 +3,9 @@ export const getUsers = dataResponse => ({
   dataResponse
 });
 
-export const socket = () => ({
-  type: "SOCKET_CONNECT"
+export const socketConnect = room => ({
+  type: "SOCKET_CONNECT",
+  room
 });
 
 export const userLogged = userinfo => ({
@@ -12,13 +13,12 @@ export const userLogged = userinfo => ({
   userinfo
 });
 
-export const sendMessages = payload => {
-  console.log(payload, 666);
-  return {
-    type: "SEND_MESSAGE_SUCCES",
-    payload: {
-      message: payload.message,
-      user: payload.user
-    }
-  };
-};
+export const joinRoom = roomID => ({
+  type: "JOIN_ROOM",
+  roomID
+});
+
+export const newMessages = message => ({
+  type: "NEW_MESSAGE",
+  message
+});
