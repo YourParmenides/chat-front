@@ -19,8 +19,15 @@ const usersList = (state = users, action) => {
 const newMessages = (state = messages, action) => {
   switch (action.type) {
     case "NEW_MESSAGE":
-      return [...state, action.message];
-      break;
+      return [
+        ...state,
+        {
+          message: action.payload.message,
+          rooomID: action.payload.roomID,
+          user: action.payload.user,
+          translated: action.payload.translated
+        }
+      ];
     default:
       return state;
   }

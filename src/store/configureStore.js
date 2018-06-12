@@ -8,8 +8,10 @@ import { loadState, saveState } from "./localStorageHelper";
 
 const store = createStore(
   reducers,
-  // loadState(),
-  applyMiddleware(logger, socketEvents)
+  loadState(),
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+
+  // applyMiddleware(logger, socketEvents)
 );
 
 store.subscribe(() => {

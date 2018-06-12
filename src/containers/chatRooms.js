@@ -2,13 +2,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-
 import { getUsers, joinRoom } from "../actions/actions";
-// import { allUsers } from "../components/message";
 import ChatRoom from "../components/chatRoom";
 import { Layout, Menu, Icon } from "antd";
-// import io from "socket.io-client";
-
+import "../App.css";
+import "../animate.css";
 const { Sider } = Layout;
 //main component of chat, fetch users and render them to user list, add component of chat and userlist,
 //route each user to a specific chat
@@ -28,14 +26,16 @@ class ChatRooms extends Component {
   // this.props.match.params.user
   allUsers = () => {
     return this.props.usersList.map(e => {
-      return (
-        <Menu.Item key={e.id} className="fadeInDown" ref="menuitem">
-          <Link to={`/chatrooms/${e.username}`}>
-            <Icon type="user" />
-            <span className="nav-text">{e.username}</span>
-          </Link>
-        </Menu.Item>
-      );
+      if (e.username !== this.props.userLogged.username) {
+        return (
+          <Menu.Item key={e.id} className="fadeInDown" ref="menuitem">
+            <Link to={`/chatrooms/${e.username}`}>
+              <Icon type="user" className="icon" />
+              <span className="nav-text">{e.username}</span>
+            </Link>
+          </Menu.Item>
+        );
+      }
     });
   };
   //
@@ -71,7 +71,7 @@ class ChatRooms extends Component {
 
 const mapStateToProps = state => ({
   usersList: state.usersList.users,
-  userLogged: state.userLogged
+  userLogged: state.userLogged.userLoggedIn
 });
 
 const mapDispatchToProps = dispatch => ({

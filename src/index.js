@@ -9,9 +9,6 @@ import { BrowserRouter } from "react-router-dom";
 import { reducers } from "./reducers/reducers";
 import store from "./store/configureStore";
 
-// const composeEnhancers =
-//   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
-
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>

@@ -18,7 +18,7 @@ export const joinRoom = roomID => ({
   roomID
 });
 
-export const newMessages = message => ({
+export const newMessages = payload => ({
   type: "NEW_MESSAGE",
-  message
+  payload
 });

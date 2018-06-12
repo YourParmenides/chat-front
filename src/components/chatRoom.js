@@ -1,14 +1,24 @@
 //import elements
 import React, { Component } from "react";
 import { connect } from "react-redux";
-// import { Redirect } from "react-router";
-import { joinRoom, newMessages } from "../actions/actions";
+import { newMessages } from "../actions/actions";
 import { Layout } from "antd";
 import io from "socket.io-client";
+import "../App.css";
+import "../animate.css";
 const socket = io.connect("http://localhost:8000");
-const { Header, Content, Footer } = Layout;
+const { Header, Footer } = Layout;
 
 // create single chat room with user language and onclick redirect to a chat
+const uniqueId = (me, other) =>
+  me > other ? `${other}--v--${me}` : `${me}--v--${other}`;
+
+const joinRoom = (me, other) => {
+  if (me && other) {
+    const id = uniqueId(me, other);
+    socket.emit("JOIN_ROOM", id);
+  }
+};
 
 class ChatRoom extends Component {
   constructor(props) {
@@ -18,38 +28,28 @@ class ChatRoom extends Component {
       messages: "",
       sended: false
     };
+    this.textListener = payload => {
+      props.newMessages(payload);
+    };
+    socket.on("text", this.textListener);
+    if (props.user) joinRoom(props.userLogged.username, props.user);
   }
 
-  componentDidUpdate() {
-    if (this.props.user) {
-      const id = this.uniqueIdCreator();
-      console.log(id);
-      // this.props.joinRoom(id);
+  componentWillUnmount() {
+    socket.off("text", this.textListener);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.user && prevProps.user !== this.props.user) {
+      joinRoom(this.props.userLogged.username, this.props.user);
     }
   }
-
-  uniqueIdCreator = () => {
-    const me = this.props.userLogged.username;
-    const other = this.props.user;
-    const both = me > other ? `${other}--v--${me}` : `${me}--v--${other}`;
-    return both;
-  };
-
-  // uniqueId = () => {
-  //   const id = this.uniqueIdCreator();
-  // };
 
   //send the message ant key 13
   handleKeyUp = e => {
     if (e.keyCode === 13) {
-      this.allMessages();
-      const id = this.uniqueIdCreator();
-      socket.emit(
-        "NEW_MESSAGE",
-        id,
-        this.state.inputvalue,
-        this.props.userLogged.username
-      );
+      const id = uniqueId(this.props.userLogged.username, this.props.user);
+      socket.emit("NEW_MESSAGE", id, this.state.inputvalue, this.props.user);
     }
   };
 
@@ -59,36 +59,43 @@ class ChatRoom extends Component {
     });
   };
 
-  allMessages = () => {
-    socket.on("text", message => {
-      this.props.newMessages(message);
-      console.log(message, "MESSAGE repetidos????");
-    });
-  };
-
   appendMessages = () => {
-    console.log(this.props, "props");
-    return this.props.messages.map(e => {
-      return <p>{e}</p>;
+    return this.props.message.map(e => {
+      if (
+        e.rooomID === uniqueId(this.props.userLogged.username, this.props.user)
+      ) {
+        if (e.user !== this.props.user) {
+          return (
+            <div className="messageboxother">
+              <p key={Math.random()} className="message-text">
+                {e.translated}
+              </p>
+            </div>
+          );
+        } else {
+          return (
+            <div className="messagebox">
+              <p key={Math.random()} className="message-text">
+                {e.message}
+              </p>
+              <em key={Math.random()} className="message-text">
+                {e.translated}
+              </em>
+            </div>
+          );
+        }
+      }
     });
   };
 
   render() {
     return (
       <div className="chatRoom">
-        <Layout>
-          <Header style={{ background: "#fff", padding: 0 }}>
-            {this.props.user}
-          </Header>
-          <Content style={{ margin: "24px 16px 0" }}>
-            <div className="content-layout">{this.appendMessages()}</div>
-          </Content>
-          <Footer style={{ textAlign: "center" }}>
-            <div className="footer">
-              <input onKeyUp={this.handleKeyUp} onChange={this.handleChange} />
-            </div>
-          </Footer>
-        </Layout>
+        <div className="header">{this.props.user}</div>
+        <div className="content-layout">{this.appendMessages()}</div>
+        <div className="footer">
+          <input onKeyUp={this.handleKeyUp} onChange={this.handleChange} />
+        </div>
       </div>
     );
   }
@@ -96,15 +103,15 @@ class ChatRoom extends Component {
 
 const mapStateToProps = state => {
   return {
-    messages: state.messages,
+    message: state.messages,
     users: state.usersList,
     userLogged: state.userLogged.userLoggedIn
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  joinRoom: roomID => dispatch(joinRoom(roomID)),
-  newMessages: message => dispatch(newMessages(message))
+  // joinRoom: roomID => dispatch(joinRoom(roomID)),
+  newMessages: payload => dispatch(newMessages(payload))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom);

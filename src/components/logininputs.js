@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import { Input, Button } from "antd";
+import { Input, Button, Select } from "antd";
 import { Redirect } from "react-router";
+import languages from "./languages";
+const Option = Select.Option;
 
 class LogInInputs extends Component {
   constructor(props) {
@@ -19,18 +21,32 @@ class LogInInputs extends Component {
     });
   };
 
+  captureSelected = e => {
+    this.setState({
+      language: e
+    });
+  };
+
   checkUser = () => {
     fetch("http://localhost:8000/addUser", {
       method: "POST",
       body: JSON.stringify(this.state),
-      headers: new Headers({
+      headers: {
         "Content-Type": "application/json"
+      }
+    })
+      .then(res => {
+        if (res.status === 200 || res.status === 201)
+          this.props.user.userLogged(this.state);
+        if (res.status === 200) this.setState({ redirect: true });
+        if (res.status === 201) this.setState({ redirect: true });
       })
-    }).then(res => {
-      if (res.status === 200 || res.status === 201)
-        this.props.user.userLogged(this.state);
-      if (res.status === 200) this.setState({ redirect: true });
-      if (res.status === 201) this.setState({ redirect: true });
+      .catch(err => console.log(err));
+  };
+
+  mapAllLanguages = () => {
+    return languages.map(e => {
+      return <Option value={e}>{e}</Option>;
     });
   };
 
@@ -47,15 +63,21 @@ class LogInInputs extends Component {
           onChange={this.captureInput}
         />
         <Input
+          type="password"
           name="password"
           placeholder="password"
           onChange={this.captureInput}
         />
-        <Input
+        <Select
+          // mode="tags"
           name="language"
-          placeholder="language"
-          onChange={this.captureInput}
-        />
+          defaultValue="Choose Language"
+          style={{ width: 200, marginTop: 15 }}
+          onChange={this.captureSelected}
+        >
+          {this.mapAllLanguages()}
+        </Select>
+
         <Button type="primary" onClick={this.checkUser}>
           Sign in /Sign up
         </Button>
