@@ -47,9 +47,10 @@ class ChatRoom extends Component {
 
   //send the message ant key 13
   handleKeyUp = e => {
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13 && this.state.inputvalue !== "") {
       const id = uniqueId(this.props.userLogged.username, this.props.user);
       socket.emit("NEW_MESSAGE", id, this.state.inputvalue, this.props.user);
+      e.target.value = "";
     }
   };
 
@@ -59,6 +60,17 @@ class ChatRoom extends Component {
     });
   };
 
+  //time send messages
+  formatDate = () => {
+    let date = new Date();
+
+    var amOrPm = date.getHours() < 12 ? "am" : "pm";
+    var hour = date.getHours() < 12 ? date.getHours() : date.getHours() - 12;
+    let time = hour + ":" + date.getMinutes() + " " + amOrPm;
+    return <p>{time}</p>;
+    // return hour + ":" + date.getMinutes() + " " + amOrPm;
+  };
+
   appendMessages = () => {
     return this.props.message.map(e => {
       if (
@@ -66,21 +78,40 @@ class ChatRoom extends Component {
       ) {
         if (e.user !== this.props.user) {
           return (
-            <div className="messageboxother">
-              <p key={Math.random()} className="message-text">
-                {e.translated}
-              </p>
+            <div className="wholeMessageOther">
+              <div className="userInfoOther">
+                <i className="dotGreen" />
+                <p className="userNameInfo">
+                  <b>{this.props.userLogged.username}</b>
+                </p>
+                {this.formatDate()}
+              </div>
+              <div className="messageboxother animated zoomIn">
+                <p key={Math.random()} className="message-text-other">
+                  {e.translated}
+                </p>
+                {/* <em key={Math.random()} className="message-text-second-other">
+                  {e.message}
+                </em> */}
+              </div>
             </div>
           );
         } else {
           return (
-            <div className="messagebox">
-              <p key={Math.random()} className="message-text">
-                {e.message}
-              </p>
-              <em key={Math.random()} className="message-text">
-                {e.translated}
-              </em>
+            <div className="wholeMessage">
+              <div className="userInfo">
+                {this.formatDate()}
+                <p className="userNameInfo">{e.user}</p>
+                <i className="dotBlue" />
+              </div>
+              <div className="messagebox animated zoomIn">
+                <p key={Math.random()} className="message-text">
+                  {e.message}
+                </p>
+                <em key={Math.random()} className="message-text-second">
+                  {`${e.translated} (${e.language})`}
+                </em>
+              </div>
             </div>
           );
         }
@@ -92,9 +123,13 @@ class ChatRoom extends Component {
     return (
       <div className="chatRoom">
         <div className="header">{this.props.user}</div>
-        <div className="content-layout">{this.appendMessages()}</div>
+        <div className="contentlayout">{this.appendMessages()}</div>
         <div className="footer">
-          <input onKeyUp={this.handleKeyUp} onChange={this.handleChange} />
+          <textarea
+            className="textarea"
+            onKeyUp={this.handleKeyUp}
+            onChange={this.handleChange}
+          />
         </div>
       </div>
     );

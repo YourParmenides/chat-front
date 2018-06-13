@@ -25,7 +25,8 @@ const newMessages = (state = messages, action) => {
           message: action.payload.message,
           rooomID: action.payload.roomID,
           user: action.payload.user,
-          translated: action.payload.translated
+          translated: action.payload.translated,
+          language: action.payload.language
         }
       ];
     default:

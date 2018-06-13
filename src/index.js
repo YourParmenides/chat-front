@@ -10,11 +10,13 @@ import { reducers } from "./reducers/reducers";
 import store from "./store/configureStore";
 
 ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>,
+  <div style={{ height: "100vh" }}>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </div>,
 
   document.getElementById("root")
 );

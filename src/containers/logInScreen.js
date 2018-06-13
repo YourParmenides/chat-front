@@ -9,7 +9,7 @@ class LogIn extends Component {
   render() {
     return (
       <div className="logIn">
-        <p id="title">Working Title</p>
+        <p id="title">BuddyChat</p>
         <LogInInputs user={{ ...this.props }} />
       </div>
     );

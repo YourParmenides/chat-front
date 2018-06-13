@@ -2,6 +2,13 @@ import React, { Component } from "react";
 import { Input, Button, Select } from "antd";
 import { Redirect } from "react-router";
 import languages from "./languages";
+import icon1 from "../assets/icons/001.png";
+import icon2 from "../assets/icons/002.png";
+import icon3 from "../assets/icons/003.png";
+import icon4 from "../assets/icons/004.png";
+import icon5 from "../assets/icons/005.png";
+import icon6 from "../assets/icons/006.png";
+import icon7 from "../assets/icons/007.png";
 const Option = Select.Option;
 
 class LogInInputs extends Component {
@@ -25,9 +32,27 @@ class LogInInputs extends Component {
     this.setState({
       language: e
     });
+    // this.getIcon();
   };
 
+  // getIcon = () => {
+  //   console.log(icon1);
+  //
+  //   if (this.state.username === "Carlos")
+  //     return this.setState({
+  //       icon: icon1
+  //     });
+  //
+  //   let arr = [icon2, icon3, icon4, icon5, icon6, icon7];
+  //   let result = arr[Math.floor(Math.random() * 5)];
+  //   console.log(result);
+  //   return this.setState({
+  //     icon: result
+  //   });
+  // };
+
   checkUser = () => {
+    // console.log(this.state);
     fetch("http://localhost:8000/addUser", {
       method: "POST",
       body: JSON.stringify(this.state),
