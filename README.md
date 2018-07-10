@@ -37,9 +37,10 @@ Improvements are welcome :)
 
 Fork the repo and do your thing. Push to your fork and submit a pull request.
 
-
+<p align='center>[![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com)</p>
+          
 ## Author
 
 Carlos Parera - [Github](https://github.com/YourParmenides) - [LinkedIn](https://www.linkedin.com/in/carlos-parera-alvarez-844ba3123/)
 
-<p align='center>[![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com)</p>
+
