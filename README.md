@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://imgur.com/cGJTKVb" />
+  <img src="https://imgur.com/cGJTKVb.png" size='1'/>
 </p>
 
 >BuddyChat is a live web chat that allows people to communicate even if they don't share a common language. By using Google's Transalator API, BuddyChat detects the language you have written in and sends it translated to the receiver's language of choice.
@@ -29,7 +29,7 @@ npm start
 
 * [React Native](https://facebook.github.io/react-native) - Front end library for building user interfaces
 * [Redux](https://redux.js.org) - Storage to share data inside the app
-* [Socket] (https://socket.io/) - Bi-directional communication between web clients and servers
+* [Socket](https://socket.io/) - Bi-directional communication between web clients and servers
 
 ## Contributing
 
