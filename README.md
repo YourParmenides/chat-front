@@ -25,7 +25,7 @@ npm start
 ```
 4. Clone the <a href='https://github.com/YourParmenides/chat-back'>back end</a> repo and follow the its instructions.
 
-##Built with
+## Built with
 
 * [React Native](https://facebook.github.io/react-native) - Front end library for building user interfaces
 * [Redux](https://redux.js.org) - Storage to share data inside the app
