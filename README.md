@@ -37,9 +37,7 @@ Improvements are welcome :)
 
 Fork the repo and do your thing. Push to your fork and submit a pull request.
 
-<p align='center'>
 [![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com)
-</p>
           
 ## Author
 
